@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giappone — Un Viaggio in Otto Atti</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Didact+Gothic&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ivory: #f5f2ee;
+    --charcoal: #1a1a18;
+    --warm-gray: #8c8880;
+    --gold: #b8a882;
+    --light-gold: #d4c9b0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ivory);
+    color: var(--charcoal);
+    font-family: 'Didact Gothic', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    overflow-x: hidden;
+  }
+
+  .progress-bar {
+    position: fixed; top: 0; left: 0;
+    height: 1px; background: var(--gold);
+    z-index: 200; transition: width 0.1s linear; width: 0%;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 8vw;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ivory); font-weight: 300;
+  }
+  .nav-days {
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(245,242,238,0.5);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; height: 100vh;
+    display: flex; align-items: flex-end; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=1800&q=90');
+    background-size: cover; background-position: center 55%;
+    filter: brightness(0.58) contrast(1.12);
+    transform: scale(1.05);
+    animation: heroZoom 20s ease-in-out infinite alternate;
+  }
+  @keyframes heroZoom {
+    from { transform: scale(1.05); }
+    to   { transform: scale(1.00); }
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(20,20,18,0.92) 0%, rgba(20,20,18,0.04) 65%, transparent 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 8vw 9vh;
+    opacity: 0; animation: fadeUp 1.8s ease 0.5s forwards;
+  }
+  .hero-label {
+    font-size: 10px; letter-spacing: 0.38em; text-transform: uppercase;
+    color: var(--light-gold); margin-bottom: 22px;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    font-size: clamp(54px, 8.5vw, 106px); line-height: 0.93;
+    color: var(--ivory); margin-bottom: 26px;
+  }
+  .hero-title em { font-style: italic; color: var(--light-gold); }
+  .hero-line { width: 40px; height: 1px; background: var(--gold); margin: 20px 0; }
+  .hero-sub {
+    font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: rgba(245,242,238,0.5);
+  }
+
+  /* ── INTRO ── */
+  .section-intro {
+    padding: 100px 8vw 64px;
+    display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: end;
+    border-bottom: 1px solid var(--light-gold);
+  }
+  .section-intro-label {
+    font-size: 10px; letter-spacing: 0.38em; text-transform: uppercase; color: var(--gold);
+  }
+  .section-intro-text {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    font-size: 21px; line-height: 1.75; color: var(--charcoal); max-width: 600px;
+  }
+
+  /* ── DAY CARDS ── */
+  .days-container { padding: 0 8vw; }
+
+  .day-card {
+    display: grid; grid-template-columns: 80px 1fr 1fr;
+    border-bottom: 1px solid rgba(184,168,130,0.25);
+    min-height: 480px;
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.85s ease, transform 0.85s ease;
+  }
+  .day-card.visible { opacity: 1; transform: translateY(0); }
+
+  .day-number-col {
+    display: flex; flex-direction: column; justify-content: flex-start;
+    padding: 60px 0; border-right: 1px solid rgba(184,168,130,0.25);
+  }
+  .day-num {
+    font-family: 'Cormorant Garamond', serif; font-size: 11px;
+    letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold);
+    writing-mode: vertical-lr; transform: rotate(180deg); margin: 0 auto;
+  }
+
+  .day-content {
+    padding: 58px 52px; display: flex; flex-direction: column; justify-content: center;
+  }
+  .day-city {
+    font-size: 9px; letter-spacing: 0.45em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px;
+  }
+  .day-title {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    font-size: 38px; line-height: 1.12; color: var(--charcoal); margin-bottom: 8px;
+  }
+  .day-title em { font-style: italic; }
+  .day-hotel-tag {
+    font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--warm-gray); margin-bottom: 28px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .day-hotel-tag::before {
+    content: ''; display: inline-block; width: 20px; height: 1px; background: var(--gold);
+  }
+  .day-description {
+    font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 300;
+    line-height: 1.88; color: #3a3a36; margin-bottom: 34px; max-width: 400px;
+  }
+  .experiences { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .experiences li {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--warm-gray); display: flex; align-items: center; gap: 14px;
+  }
+  .experiences li::before {
+    content: ''; width: 16px; height: 1px; background: var(--gold); flex-shrink: 0;
+  }
+
+  .day-image { position: relative; overflow: hidden; }
+  .day-image img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.95s ease;
+    filter: brightness(0.90) contrast(1.06) saturate(0.88);
+  }
+  .day-card:hover .day-image img { transform: scale(1.04); }
+  .day-image-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(26,26,24,0.18) 0%, transparent 55%);
+    pointer-events: none;
+  }
+
+  /* ── INTERLUDE ── */
+  .interlude {
+    background: var(--charcoal); padding: 110px 8vw;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .interlude-quote {
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300;
+    font-size: 30px; line-height: 1.55; color: var(--ivory); margin-bottom: 24px;
+  }
+  .interlude-quote span { color: var(--gold); }
+  .interlude-author {
+    font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--warm-gray); display: flex; align-items: center; gap: 14px;
+  }
+  .interlude-author::before {
+    content: ''; width: 24px; height: 1px; background: var(--gold);
+  }
+  .interlude-img { position: relative; height: 380px; overflow: hidden; }
+  .interlude-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: brightness(0.76) saturate(0.7);
+  }
+  .interlude-caption {
+    position: absolute; bottom: 22px; left: 22px;
+    font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--light-gold);
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 80px 8vw; border-top: 1px solid var(--light-gold);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif; font-size: 18px;
+    letter-spacing: 0.4em; font-weight: 300; text-transform: uppercase; color: var(--charcoal);
+  }
+  .footer-note {
+    font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--warm-gray); text-align: right; line-height: 2.1;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 880px) {
+    .day-card { grid-template-columns: 50px 1fr; grid-template-rows: 260px auto; }
+    .day-image { grid-column: 1 / -1; order: -1 !important; height: 260px; }
+    .day-number-col { order: 0 !important; }
+    .day-content { order: 1 !important; padding: 36px 28px; }
+    .section-intro { grid-template-columns: 1fr; gap: 28px; padding-top: 80px; }
+    .interlude { grid-template-columns: 1fr; }
+    .footer { flex-direction: column; gap: 28px; text-align: center; }
+    .footer-note { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav>
+  <div class="nav-logo">Giappone</div>
+  <div class="nav-days">Thomas Torresin · 2026</div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-label">Viaggio Testamento Di Giorgio Armani</div>
+    <h1 class="hero-title">Le Impronte<br>Armani in <em>Giappone</em></h1>
+    <div class="hero-line"></div>
+    <div class="hero-sub">Tokyo · Hakone · Kyoto · Nara · Osaka</div>
+  </div>
+</section>
+
+<!-- ══ INTRO ══ -->
+<div class="section-intro">
+  <div class="section-intro-label">Itinerario · Otto Atti</div>
+  <p class="section-intro-text">
+    Il Giappone non si annuncia. Si svela — nella piega di un kimono, nel profumo del cedro, nel silenzio tra le portate. Un viaggio per chi sa che il vero lusso non fa rumore, ma rimane.
+  </p>
+</div>
+
+<!-- ══ GIORNI 1–2 ══ -->
+<div class="days-container">
+
+  <!-- GIORNO 1 -->
+  <div class="day-card">
+    <div class="day-number-col"><span class="day-num">Giorno 01</span></div>
+    <div class="day-content">
+      <div class="day-city">Tokyo</div>
+      <h2 class="day-title">Arrivo &<br><em>Prima Luce</em></h2>
+      <div class="day-hotel-tag">Aman Tokyo — Otemachi Tower</div>
+      <p class="day-description">
+        Tokyo di notte vista dal trentatreesimo piano. L'Aman è uno dei pochi luoghi dove la megalopoli smette di essere rumore e diventa paesaggio. Shoji, pietra, silenzio.
+      </p>
+      <ul class="experiences">
+        <li>Trasferimento privato da Narita in berlina nera</li>
+        <li>Rituale onsen privato al check-in nell'Aman Tokyo</li>
+        <li>Cena kaiseki all'Otemachi Tower</li>
+      </ul>
+    </div>
+    <!-- Tokyo -->
+    <div class="day-image">
+      <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=1000&q=90" alt="Tokyo di notte" loading="lazy">
+      <div class="day-image-overlay"></div>
+    </div>
+  </div>
+
+  <!-- GIORNO 2 -->
+  <div class="day-card">
+    <div class="day-number-col"><span class="day-num">Giorno 02</span></div>
+    <div class="day-content">
+      <div class="day-city">Tokyo</div>
+      <h2 class="day-title">Ginza &<br><em>La Maison</em></h2>
+      <div class="day-hotel-tag">Aman Tokyo</div>
+      <p class="day-description">
+        La mattina al flagship Giorgio Armani di Omotesando. Il pomeriggio, cerimonia del tè. La sera, cena all'Armani/Ristorante di Ginza: sala in oro pallido, cucina italiana con ingredienti stagionali giapponesi.
+      </p>
+      <ul class="experiences">
+        <li>Giorgio Armani flagship Omotesando — appuntamento Made to Measure</li>
+        <li>Armani/Caffè Omotesando — pausa nel nuovo café della Maison</li>
+        <li>Cena all'Armani/Ristorante Ginza — stella Michelin, Chef Bruno Hiruma</li>
+      </ul>
+    </div>
+    <!-- Cerimonia del tè -->
+    <div class="day-image">
+      <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1000&q=90" alt="Tokyo, Ginza" loading="lazy">
+      <div class="day-image-overlay"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ INTERLUDE 1 ══ -->
+<div class="interlude">
+  <div>
+    <p class="interlude-quote">
+      "L'eleganza non è farsi notare,<br> ma farsi<span> ricordare</span>."
+    </p>
+    <div class="interlude-author">Giorgio Armani</div>
+  </div>
+  <!-- Il Fuji -->
+  <div class="interlude-img">
+    <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&q=90" alt="Monte Fuji all'alba">
+    <div class="interlude-caption"></div>
+  </div>
+</div>
+
+<!-- ══ GIORNI 3–5 ══ -->
+<div class="days-container">
+
+  <!-- GIORNO 3 -->
+  <div class="day-card">
+    <div class="day-number-col"><span class="day-num">Giorno 03</span></div>
+    <div class="day-content">
+      <div class="day-city">Hakone</div>
+      <h2 class="day-title">La Montagna<br><em>Sacra</em></h2>
+      <div class="day-hotel-tag">Gōra Kadan Ryokan</div>
+      <p class="day-description">
+        L'ex villa imperiale di Gōra Kadan accoglie con sake freddo e la vista del Fuji oltre le shoji. Fuori, la foresta. Dentro, il silenzio di chi è arrivato dove doveva arrivare.
+      </p>
+      <ul class="experiences">
+        <li>Shinkansen privato da Tokyo ad Odawara</li>
+        <li>Cerimonia d'arrivo e rotenburo privato all'aperto</li>
+        <li>Cena kaiseki multi-portata in camera</li>
+      </ul>
+    </div>
+    <!-- Hakone -->
+    <div class="day-image">
+      <img src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=1000&q=90" alt="Monte Fuji da Hakone" loading="lazy">
+      <div class="day-image-overlay"></div>
+    </div>
+  </div>
+
+  <!-- GIORNO 4 -->
+  <div class="day-card">
+    <div class="day-number-col"><span class="day-num">Giorno 04</span></div>
+    <div class="day-content">
+      <div class="day-city">Hakone</div>
+      <h2 class="day-title">Vapore,<br><em>Acqua & Silenzio</em></h2>
+      <div class="day-hotel-tag">Gōra Kadan Ryokan</div>
+      <p class="day-description">
+        Prima dell'alba, l'onsen all'aperto tra gli alberi. La nebbia sale dalla valle. Non c'è nessun altro. Il giorno continua tra sculture en plein air e un workshop di ikebana.
+      </p>
+      <ul class="experiences">
+        <li>Bagno onsen privato prima dell'alba</li>
+        <li>Museo en Plein Air di Hakone — tour privato</li>
+        <li>Workshop di ikebana con un maestro tradizionale</li>
+      </ul>
+    </div>
+    <!-- Onsen nel bosco -->
+    <div class="day-image">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1000&q=90" alt="Onsen esterno giapponese" loading="lazy">
+      <div class="day-image-overlay"></div>
+    </div>
+  </div>
+
+  <!-- GIORNO 5 -->
+  <div class="day-card">
+    <div class="day-number-col"><span class="day-num">Giorno 05</span></div>
+    <div class="day-content">
+      <div class="day-city">Kyoto</div>
+      <h2 class="day-title">L'Antica<br><em>Capitale</em></h2>
+      <div class="day-hotel-tag">SOWAKA Hotel — Higashiyama</div>
+      <p class="day-description">
+        Sowaka è una machiya centenaria diventata rifugio. I vicoli di Higashiyama e Ninenzaka, fuori dalla porta, sono rimasti identici da secoli. La sera si cammina quasi soli.
+      </p>
+      <ul class="experiences">
+        <li>Shinkansen privato per Kyoto</li>
+        <li>Passeggiata serale a Higashiyama e Ninenzaka</li>
+        <li>Omakase al Nakamura — 450 anni di storia</li>
+      </ul>
+    </div>
+    <!-- Vicolo storico di Kyoto: abbinamento diretto con Higashiyama -->
+    <div class="day-image">
+      <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1000&q=90" alt="Vicoli di Kyoto, Higashiyama" loading="lazy">
+      <div class="day-image-overlay"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ INTERLUDE 2 ══ -->
+<div class="interlude">
+  <div>
+    <p class="interlude-quote">
+      "In Giappone la bellezza<br>abita nell'<span>intervallo</span> —<br>nel respiro prima dell'inchino."
+    </p>
+    <div class="interlude-author">Yoko Ono</div>
+  </div>
+  <!-- Bosco di bambù -->
+  <div class="interlude-img">
+    <img src="https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=900&q=90" alt="Bosco di bambù, Arashiyama">
+    <div class="interlude-caption">Arashiyama — Bosco di Bambù</div>
+  </div>
+</div>
+
+<!-- ══ GIORNI 6–8 ══ -->
+<div class="days-container">
+
+  <!-- GIORNO 6 -->
+  <div class="day-card">
+    <div class="day-number-col"><span class="day-num">Giorno 06</span></div>
+    <div class="day-content">
+      <div class="day-city">Kyoto</div>
+      <h2 class="day-title">Oro &<br><em>Riflessione</em></h2>
+      <div class="day-hotel-tag">SOWAKA Hotel</div>
+      <p class="day-description">
+        Alle sette il Kinkaku-ji brilla sul lago senza folla. Poi il Mercato Nishiki — stretto, profumato, pieno di ingredienti rari. La sera, cena kappo al Kikunoi Honten.
+      </p>
+      <ul class="experiences">
+        <li>Kinkaku-ji all'alba — accesso privato</li>
+        <li>Mercato Nishiki con uno chef privato</li>
+        <li>Cena al Kikunoi Honten — 3 stelle Michelin</li>
+      </ul>
+    </div>
+    <!-- Il Padiglione d'Oro riflesso nel laghetto: abbinamento diretto al titolo "Oro & Riflessione" -->
+    <div class="day-image">
+      <img src="https://images.unsplash.com/photo-1624253321171-1be53e12f5f4?w=1000&q=90" alt="Kinkakuji, Padiglione d'Oro" loading="lazy">
+      <div class="day-image-overlay"></div>
+    </div>
+  </div>
+
+  <!-- GIORNO 7 -->
+  <div class="day-card">
+    <div class="day-number-col"><span class="day-num">Giorno 07</span></div>
+    <div class="day-content">
+      <div class="day-city">Nara · Osaka</div>
+      <h2 class="day-title">Cervi Sacri<br><em>& La Maison a Ovest</em></h2>
+      <div class="day-hotel-tag">The St. Regis Osaka</div>
+      <p class="day-description">
+        I cervi di Nara pascolano liberi tra i pini del Kasuga Grand Shrine. Nel pomeriggio, Osaka — e una sosta alla boutique Giorgio Armani dell'Hankyu Umeda, il grande magazzino più elegante della città. Check-in al St. Regis, maggiordomo e bagno preparato.
+      </p>
+      <ul class="experiences">
+        <li>Auto privata per Nara — Kasuga Grand Shrine</li>
+        <li>Giorgio Armani Boutique — Hankyu Umeda, Osaka</li>
+        <li>Cena di tempura e sake al Dotonbori</li>
+      </ul>
+    </div>
+    <!-- I cervi di Nara  -->
+    <div class="day-image">
+      <img src="https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?w=1000&q=90" alt="Cervi sacri di Nara" loading="lazy">
+      <div class="day-image-overlay"></div>
+    </div>
+  </div>
+
+  <!-- GIORNO 8 -->
+  <div class="day-card">
+    <div class="day-number-col"><span class="day-num">Giorno 08</span></div>
+    <div class="day-content">
+      <div class="day-city">Osaka · Partenza</div>
+      <h2 class="day-title">L'Ultima<br><em>Mattina</em></h2>
+      <div class="day-hotel-tag">Aeroporto Internazionale del Kansai</div>
+      <p class="day-description">
+        Colazione all'Emporio Armani Caffè di Namba, tra il bianco e il grigio di un interno disegnato dalla Maison. Un ultimo passaggio al Castello di Osaka nei giardini silenziosi del mattino. Poi la berlina verso il Kansai. Il Giappone non saluta. Si inchina soltanto.
+      </p>
+      <ul class="experiences">
+        <li>Emporio Armani Caffè — Takashimaya Namba, Osaka</li>
+        <li>Giardini del Castello di Osaka all'alba</li>
+        <li>Trasferimento privato, Kansai International</li>
+      </ul>
+    </div>
+    <!-- Osaka di notte: la città dell'ultimo giorno -->
+    <div class="day-image">
+      <img src="https://images.unsplash.com/photo-1590559899731-a382839e5549?w=1000&q=90" alt="Osaka" loading="lazy">
+      <div class="day-image-overlay"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer">
+  <div class="footer-logo">Giappone &nbsp;·&nbsp; Armani</div>
+  <div class="footer-note">
+    Itinerario curato — Otto giorni<br>
+    Tokyo · Hakone · Kyoto · Nara · Osaka<br>
+    Nello spirito del lusso silenzioso<br><br>
+    THOMAS TORRESIN
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const s = h.scrollTop || document.body.scrollTop;
+    const t = h.scrollHeight - h.clientHeight;
+    document.getElementById('progressBar').style.width = (s / t * 100) + '%';
+  });
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.day-card').forEach(c => obs.observe(c));
+</script>
+</body>
+</html>
